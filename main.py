@@ -1,18 +1,15 @@
 from questao2 import Questao2
+from questao3 import Questao3
 
 
 def main():
-    questao2 = Questao2()
-    atual = questao2.iniciar()
+    # questao2 = Questao2()
+    # destino = questao2.iniciar()
+    # questao2.mostrar_caminho(destino)
 
-    trace = []
-    while atual != None:
-        trace.append(atual)
-        atual = atual.pai
-
-    for step in trace[::-1]:
-        print(step)
+    questao3 = Questao3('test1.txt')
+    questao3.iniciar()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
