@@ -2,11 +2,16 @@ from questao2 import Questao2
 
 
 def main():
-    # questao2 = Questao2()
-    # questao2.iniciar()
-    a = [[1, 2], [3, 4]]
-    b = (0, 1)
-    print(a[b[0]][b[1]])
+    questao2 = Questao2()
+    atual = questao2.iniciar()
+
+    trace = []
+    while atual != None:
+        trace.append(atual)
+        atual = atual.pai
+
+    for step in trace[::-1]:
+        print(step)
 
 
 if __name__ == "__main__":
