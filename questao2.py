@@ -15,7 +15,7 @@ class Questao2:
       for col in range(len(self.nos)):
         self.nos[lin][col].posicao = (lin, col)
 
-    self.inicio = self.nos[2][3]
+    self.inicio = self.nos[6][0]
     self.destino = self.nos[2][5]
 
   def iniciar(self):
@@ -68,6 +68,20 @@ class Questao2:
         movimentos.append(self.nos[dx][dy])
     return movimentos
 
+  def mostrar_caminho(self, destino):
+    atual = destino
+    trace = []
+    while atual != None:
+        trace.append(atual)
+        atual = atual.pai
+
+    for step in trace[::-1]:
+        print(step)
+
+    if len(trace) == 0:
+        print('Não existe caminho possível')
+
+        
 class No:
   def __init__(self, heuristica):
     self.heuristica = heuristica
@@ -81,4 +95,4 @@ class No:
     return self.heuristica == None
 
   def __str__(self):
-    return f"{self.posicao} - {self.heuristica}"
+    return f'{self.posicao} - {self.heuristica}'
