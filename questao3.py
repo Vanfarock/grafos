@@ -1,4 +1,5 @@
 import time
+import queue
 from texttable import Texttable
 
 class Questao3:
@@ -21,20 +22,33 @@ class Questao3:
       relacao[1].adicionar(relacao[0])
 
   def iniciar(self, numero_casos):
+    self.__iniciar_dfs(numero_casos)
+    self.__iniciar_bfs(numero_casos)
+
+  def __iniciar_dfs(self, numero_casos):
     casos = []
     for _ in range(numero_casos):
-      self.__shift(self.nos)
       caso = CasoQuestao3(self.nos)
       caso.dfs()
       casos.append(caso)
-    self.__gerar_tabela(casos)
+      self.__shift(self.nos)
+    self.__gerar_tabela('DFS', casos)
+
+  def __iniciar_bfs(self, numero_casos):
+    casos = []
+    for _ in range(numero_casos):
+      caso = CasoQuestao3(self.nos)
+      caso.bfs()
+      casos.append(caso)
+      self.__shift(self.nos)
+    self.__gerar_tabela('BFS', casos)
 
   def __shift(self, arr):
     primeiroValor = arr.pop(0)
     arr.append(primeiroValor)
 
-  def __gerar_tabela(self, casos):
-    header = ['DFS']
+  def __gerar_tabela(self, algoritmo, casos):
+    header = [algoritmo]
     valores = ['Tempo medio execucao']
     
     tempoExecucaoTotal = 0
@@ -56,7 +70,7 @@ class Questao3:
     print(t.draw())
 
 def formatarTempo(segundos):
-  return f'{round(segundos, 2)}s'
+  return f'{round(segundos, 50)}s'
 
 
 class CasoQuestao3:
@@ -85,6 +99,25 @@ class CasoQuestao3:
       filho.tempo = no.tempo
       filho.pai = no
       self.__logica_dfs(filho)
+
+  def bfs(self):
+    inicioTempoExecucao = time.time()
+    
+    fila = queue.Queue()
+    fila.put(self.nos[0])
+    while not fila.empty():
+      u = fila.get()
+      for filho in u.filhos:
+        if filho.passou:
+          continue
+
+        fila.append(filho)
+        filho.tempo = u.tempo + 1
+        filho.pai = u
+        filho.passou = True
+      u.passou = True
+    fimTempoExecucao = time.time()
+    self.tempoExecucao = fimTempoExecucao - inicioTempoExecucao
 
 
 class No:

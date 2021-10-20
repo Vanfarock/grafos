@@ -1,5 +1,5 @@
 from questao2 import Questao2
-from questao3 import Questao3
+from questao3 import CasoQuestao3, Questao3
 
 def main():
   # questao2 = Questao2()
