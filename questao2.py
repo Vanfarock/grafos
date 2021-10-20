@@ -81,6 +81,7 @@ class Questao2:
     if len(trace) == 0:
         print('Não existe caminho possível')
 
+        
 class No:
   def __init__(self, heuristica):
     self.heuristica = heuristica

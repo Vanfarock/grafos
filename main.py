@@ -1,4 +1,3 @@
-from questao2 import Questao2
 from questao3 import CasoQuestao3, Questao3
 
 def main():
