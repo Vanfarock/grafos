@@ -3,6 +3,9 @@ import queue
 from texttable import Texttable
 
 class Questao3:
+  NOME_ARQUIVO_RESULTADOS = "resultados_questao3.txt"
+  NOME_ARQUIVO_TABELAS = "tabelas_questao3.txt"
+
   def __init__(self, caminho_arquivo):
     self.tempoExecucao = 0
 
@@ -22,37 +25,70 @@ class Questao3:
       relacao[1].adicionar(relacao[0])
 
   def iniciar(self, numero_casos):
+    self.__limpar_arquivo(Questao3.NOME_ARQUIVO_RESULTADOS)
+    self.__limpar_arquivo(Questao3.NOME_ARQUIVO_TABELAS)
+
     self.__iniciar_dfs(numero_casos)
     self.__iniciar_bfs(numero_casos)
 
+  def __limpar_arquivo(self, nome_arquivo):
+    f = open(nome_arquivo, "w")
+    f.write("")
+
   def __iniciar_dfs(self, numero_casos):
     casos = []
-    for _ in range(numero_casos):
+    for i in range(numero_casos):
       caso = CasoQuestao3(self.nos)
       caso.dfs()
+      self.__gerar_tabela("DFS", i)
       casos.append(caso)
       self.__shift(self.nos)
-    self.__gerar_tabela('DFS', casos)
+    self.__gerar_resultados('DFS', casos)
 
   def __iniciar_bfs(self, numero_casos):
     casos = []
-    for _ in range(numero_casos):
+    for i in range(numero_casos):
       caso = CasoQuestao3(self.nos)
       caso.bfs()
+      self.__gerar_tabela("BFS", i)
       casos.append(caso)
       self.__shift(self.nos)
-    self.__gerar_tabela('BFS', casos)
+    self.__gerar_resultados('BFS', casos)
 
   def __shift(self, arr):
     primeiroValor = arr.pop(0)
     arr.append(primeiroValor)
 
-  def __gerar_tabela(self, algoritmo, casos):
+  def __gerar_tabela(self, algoritmo, caso):
+    f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
+    caso += 1
+    if caso == 1:
+      f.write('=====================================================================\r\n')
+      f.write(f'{algoritmo}\r\n')
+
+    header = [f'T{caso}']
+    pi = ['Pi']
+    pai = ['Pai']
+
+    for no in self.nos:
+      header.append(no.id)
+      pi.append(no.tempo)
+      
+      if no.pai is None: pai.append('null')
+      else: pai.append(no.pai.id)
+
+    t = Texttable(max_width=0)
+    t.add_rows([header, pi, pai])
+
+    f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
+    f.write(f'{t.draw()}\r\n')
+    f.close()
+
+  def __gerar_resultados(self, algoritmo, casos):
     header = [algoritmo]
     valores = ['Tempo medio execucao']
     
     tempoExecucaoTotal = 0
-    t = Texttable(max_width=0)
     for i, caso in enumerate(casos):
       header.append(f'T{i + 1}')
       valores.append(formatarTempo(caso.tempoExecucao))
@@ -61,16 +97,15 @@ class Questao3:
     header.append('Media')
     valores.append(formatarTempo(tempoExecucaoTotal / len(casos)))
 
+    t = Texttable(max_width=0)
     t.add_rows([header, valores])
 
-    f = open("resultados_questao3.txt", "w")
-    f.write(t.draw())
+    f = open(Questao3.NOME_ARQUIVO_RESULTADOS, "a")
+    f.write(f'{t.draw()}\r\n')
     f.close()
 
-    print(t.draw())
-
 def formatarTempo(segundos):
-  return f'{round(segundos, 50)}s'
+  return f'{round(segundos, 2)}s'
 
 
 class CasoQuestao3:
