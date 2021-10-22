@@ -1,0 +1,20 @@
+a. A ordem em que os vértices são explorados (ou seja, removidos da fila) ao realizarmos uma BFS
+
+
+
+b. O vetor de roteamento e a árvore gerada pela BFS
+
+
+
+c. A ordem em que os vértices são finalizados (ou seja, removidos da pilha) ao realizarmos uma DFS
+M P O N F B C D G H L K J I E A
+
+
+d. O vetor de roteamento e a árvore gerada pela DFS
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
+|     |  A  |  B  |  C  |  D  |  E  |  F  |  G  |  H  |  I  |  J  |  K  |  L  |  M  |  N  |  O  |  P  |
++=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
+| pi  |  0  |  9  |  8  |  7  |  1  |  4  |  7  |  6  |  2  |  3  |  4  |  5  |  3  |  4  |  5  |  6  |
++=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+=====+
+| pai | nil |  C  |  D  |  H  |  A  |  J  |  H  |  L  |  E  |  I  |  J  |  K  |  I  |  J  |  N  |  P  |
++-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+
