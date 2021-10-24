@@ -40,9 +40,12 @@ class Questao3:
     for i in range(numero_casos):
       caso = CasoQuestao3(self.nos)
       caso.dfs()
-      self.__gerar_tabela("DFS", i)
+      
+      self.__gerar_tabela_dfs(i)
       casos.append(caso)
       self.__shift(self.nos)
+      self.__reset(self.nos)
+    
     self.__gerar_resultados('DFS', casos)
 
   def __iniciar_bfs(self, numero_casos):
@@ -50,35 +53,70 @@ class Questao3:
     for i in range(numero_casos):
       caso = CasoQuestao3(self.nos)
       caso.bfs()
-      self.__gerar_tabela("BFS", i)
+      self.__gerar_tabela_bfs(i)
+    
       casos.append(caso)
       self.__shift(self.nos)
+      self.__reset(self.nos)
+    
     self.__gerar_resultados('BFS', casos)
 
   def __shift(self, arr):
     primeiroValor = arr.pop(0)
     arr.append(primeiroValor)
 
-  def __gerar_tabela(self, algoritmo, caso):
+  def __reset(self, arr):
+    for no in arr:
+      no.pai = None
+      no.tempo = 0
+      no.tempo_fechamento = 0
+      no.passou = False
+
+  def __gerar_tabela_dfs(self, caso):
     f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
     caso += 1
     if caso == 1:
       f.write('=====================================================================\r\n')
-      f.write(f'{algoritmo}\r\n')
+      f.write(f'DFS\r\n')
 
     header = [f'T{caso}']
-    pi = ['Pi']
-    pai = ['Pai']
+    d = ['d']
+    pi = ['pi']
 
     for no in self.nos:
       header.append(no.id)
-      pi.append(no.tempo)
+      d.append(f'{no.tempo}/{no.tempo_fechamento}')
       
-      if no.pai is None: pai.append('null')
-      else: pai.append(no.pai.id)
+      if no.pai is None: pi.append('null')
+      else: pi.append(no.pai.id)
 
     t = Texttable(max_width=0)
-    t.add_rows([header, pi, pai])
+    t.add_rows([header, d, pi])
+
+    f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
+    f.write(f'{t.draw()}\r\n')
+    f.close()
+
+  def __gerar_tabela_bfs(self, caso):
+    f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
+    caso += 1
+    if caso == 1:
+      f.write('=====================================================================\r\n')
+      f.write(f'BFS\r\n')
+
+    header = [f'T{caso}']
+    d = ['d']
+    pi = ['pi']
+
+    for no in self.nos:
+      header.append(no.id)
+      d.append(no.tempo)
+      
+      if no.pai is None: pi.append('null')
+      else: pi.append(no.pai.id)
+
+    t = Texttable(max_width=0)
+    t.add_rows([header, d, pi])
 
     f = open(Questao3.NOME_ARQUIVO_TABELAS, "a")
     f.write(f'{t.draw()}\r\n')
@@ -113,6 +151,7 @@ class CasoQuestao3:
     self.tempoExecucao = 0
 
     self.nos = nos
+    self.tempo = 0
 
   def dfs(self):
     inicioTempoExecucao = time.time()
@@ -126,7 +165,8 @@ class CasoQuestao3:
   
   def __logica_dfs(self, no):
     no.passou = True
-    no.tempo += 1
+    self.tempo += 1
+    no.tempo = self.tempo
     for filho in no.filhos:
       if filho.passou:
         continue
@@ -134,6 +174,9 @@ class CasoQuestao3:
       filho.tempo = no.tempo
       filho.pai = no
       self.__logica_dfs(filho)
+    
+    self.tempo += 1
+    no.tempo_fechamento = self.tempo
 
   def bfs(self):
     inicioTempoExecucao = time.time()
@@ -146,11 +189,12 @@ class CasoQuestao3:
         if filho.passou:
           continue
 
-        fila.append(filho)
+        fila.put(filho)
         filho.tempo = u.tempo + 1
         filho.pai = u
         filho.passou = True
       u.passou = True
+
     fimTempoExecucao = time.time()
     self.tempoExecucao = fimTempoExecucao - inicioTempoExecucao
 
@@ -160,6 +204,7 @@ class No:
     self.id = id
     self.pai = None
     self.tempo = 0
+    self.tempo_fechamento = 0
     self.filhos = []
     self.passou = False
 

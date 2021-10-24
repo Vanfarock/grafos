@@ -1,6 +1,5 @@
 class Questao2:
   def __init__(self):
-
     self.nos = [
       [No(False), No(False), No(False), No(False), No(False), No(False), No(False)],
       [No(False), No(False), No(False), No(False), No(True),  No(True),  No(False)],
@@ -15,8 +14,8 @@ class Questao2:
       for col in range(len(self.nos)):
         self.nos[lin][col].posicao = (lin, col)
 
-    self.inicio = self.nos[6][0]
-    self.destino = self.nos[2][5]
+    self.inicio = self.nos[0][0]
+    self.destino = self.nos[2][1]
 
   def iniciar(self):
     aberto = [self.inicio]
