@@ -2,13 +2,13 @@ class Questao2:
   def __init__(self):
 
     self.nos = [
-      [No(9),  No(8),    No(7),    No(6), No(5),    No(4),    No(3)],
-      [No(10), No(9),    No(8),    No(7), No(None), No(None), No(2)],
-      [No(11), No(None), No(None), No(8), No(None), No(0),    No(1)],
-      [No(12), No(11),   No(10),   No(9), No(None), No(1),    No(2)],
-      [No(11), No(None), No(None), No(8), No(None), No(None), No(3)],
-      [No(10), No(9),    No(8),    No(7), No(7),    No(5),    No(4)],
-      [No(11), No(None), No(None), No(8), No(6),    No(6),    No(5)],
+      [No(False), No(False), No(False), No(False), No(False), No(False), No(False)],
+      [No(False), No(False), No(False), No(False), No(True),  No(True),  No(False)],
+      [No(False), No(True),  No(True),  No(False), No(True),  No(False), No(False)],
+      [No(False), No(False), No(False), No(False), No(True),  No(False), No(False)],
+      [No(False), No(True),  No(True),  No(False), No(True),  No(True),  No(False)],
+      [No(False), No(False), No(False), No(False), No(False), No(False), No(False)],
+      [No(False), No(True),  No(True),  No(False), No(False), No(False), No(False)],
     ]
     
     for lin in range(len(self.nos)):
@@ -32,7 +32,7 @@ class Questao2:
         return atual
 
       for noAdjacente in self.obter_nos_adjacentes(atual):
-        if noAdjacente.eh_obstaculo():
+        if noAdjacente.eh_obstaculo:
           continue
 
         if noAdjacente in fechado:
@@ -40,7 +40,7 @@ class Questao2:
 
         noAdjacente.pai = atual
         noAdjacente.distancia = atual.distancia + 1
-        noAdjacente.funcao = noAdjacente.distancia + noAdjacente.heuristica
+        noAdjacente.funcao = noAdjacente.distancia + noAdjacente.obter_heuristica(self.destino)
 
         if noAdjacente in aberto:
           continue
@@ -83,16 +83,19 @@ class Questao2:
 
         
 class No:
-  def __init__(self, heuristica):
-    self.heuristica = heuristica
+  def __init__(self, eh_obstaculo):
+    self.eh_obstaculo = eh_obstaculo
+    self.__heuristica = None
     
     self.posicao = (None, None)
     self.pai = None
     self.distancia = 0
     self.funcao = 0
 
-  def eh_obstaculo(self):
-    return self.heuristica == None
+  def obter_heuristica(self, destino):
+    if self.__heuristica is None:
+      self.__heuristica = abs(destino.posicao[0] - self.posicao[0]) + abs(destino.posicao[1] - self.posicao[1])
+    return self.__heuristica
 
   def __str__(self):
-    return f'{self.posicao} - {self.heuristica}'
+    return f'{self.posicao} - {self.__heuristica}'
